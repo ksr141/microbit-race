@@ -3,11 +3,11 @@ function DrawScreen () {
         if (Screen_X != Player_X) {
             led.unplot(Screen_X, 4)
         }
-        if (Road1[Screen_X]) {
+        if (Screen_X != Road1_Opening) {
             led.unplot(Screen_X, Road1_Y - 1)
             led.plotBrightness(Screen_X, Road1_Y, 50)
         }
-        if (Road2[Screen_X]) {
+        if (Screen_X != Road2_Opening) {
             led.unplot(Screen_X, Road2_Y - 1)
             led.plotBrightness(Screen_X, Road2_Y, 50)
         }
@@ -22,40 +22,24 @@ input.onButtonPressed(Button.A, function () {
 })
 function MakeNewRoad () {
     if (Road1_Y == 4) {
-        RandomOpening = randint(0, 4)
-        Road1 = [
-        1,
-        1,
-        1,
-        1,
-        1
-        ]
-        Road1[RandomOpening] = 0
+        Road1_Opening = randint(0, 4)
         Road1_Y = 0
         for (let Screen_X = 0; Screen_X <= 4; Screen_X++) {
-            if (Road1[Screen_X]) {
+            if (Screen_X != Road1_Opening) {
                 led.plotBrightness(Screen_X, Road1_Y, 50)
             }
         }
-        Score += 1
+        Score += 10
     }
     if (Road2_Y == 4) {
-        RandomOpening = randint(0, 3)
-        Road2 = [
-        1,
-        1,
-        1,
-        1,
-        1
-        ]
-        Road2[RandomOpening] = 0
+        Road2_Opening = randint(0, 4)
         Road2_Y = 0
         for (let Screen_X = 0; Screen_X <= 4; Screen_X++) {
-            if (Road2[Screen_X]) {
+            if (Screen_X != Road2_Opening) {
                 led.plotBrightness(Screen_X, Road2_Y, 50)
             }
         }
-        Score += 1
+        Score += 10
     }
 }
 input.onButtonPressed(Button.B, function () {
@@ -65,26 +49,13 @@ input.onButtonPressed(Button.B, function () {
         led.plot(Player_X, 4)
     }
 })
-let RandomOpening = 0
 let Road2_Y = 0
 let Road1_Y = 0
 let Player_X = 0
-let Road2: number[] = []
-let Road1: number[] = []
-Road1 = [
-1,
-1,
-1,
-0,
-1
-]
-Road2 = [
-1,
-0,
-1,
-1,
-1
-]
+let Road2_Opening = 0
+let Road1_Opening = 0
+Road1_Opening = randint(0, 4)
+Road2_Opening = randint(0, 4)
 Player_X = 2
 Road1_Y = 1
 Road2_Y = -1
@@ -94,11 +65,11 @@ basic.forever(function () {
     Road1_Y = Road1_Y + 1
     Road2_Y = Road2_Y + 1
     DrawScreen()
-    if (Road1_Y == 4 && Road1[Player_X] == 1) {
+    if (Road1_Y == 4 && Road1_Opening != Player_X) {
         game.setScore(Score)
         game.gameOver()
     }
-    if (Road2_Y == 4 && Road2[Player_X] == 1) {
+    if (Road2_Y == 4 && Road2_Opening != Player_X) {
         game.setScore(Score)
         game.gameOver()
     }
